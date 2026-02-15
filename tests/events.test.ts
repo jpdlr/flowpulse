@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { makeRandomEvent, summarize } from "../src/lib/events";
+import { makeRandomEvent, parseImportedEventsJson, summarize } from "../src/lib/events";
 
 describe("event helpers", () => {
   it("builds deterministic event from seed", () => {
@@ -17,5 +17,19 @@ describe("event helpers", () => {
     expect(summary.count).toBe(3);
     expect(summary.avgLatency).toBe(340);
     expect(summary.bySeverity.error).toBe(1);
+  });
+
+  it("parses imported event JSON", () => {
+    const parsed = parseImportedEventsJson(
+      JSON.stringify([
+        { id: "evt-1", service: "api", latencyMs: 200, severity: "info", ts: "2026-01-01T00:00:00.000Z" }
+      ])
+    );
+    expect(parsed).toHaveLength(1);
+    expect(parsed[0].service).toBe("api");
+  });
+
+  it("throws on invalid import payload", () => {
+    expect(() => parseImportedEventsJson(JSON.stringify({ bad: true }))).toThrow();
   });
 });

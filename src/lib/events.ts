@@ -8,6 +8,8 @@ export type PulseEvent = {
   ts: string;
 };
 
+const validSeverities = new Set<EventSeverity>(["info", "warn", "error"]);
+
 export function makeRandomEvent(seed = Date.now()): PulseEvent {
   const services = ["api", "worker", "billing", "hooks"] as const;
   const service = services[seed % services.length];
@@ -31,4 +33,32 @@ export function summarize(events: PulseEvent[]) {
     error: events.filter((event) => event.severity === "error").length
   };
   return { count, avgLatency, bySeverity };
+}
+
+export function isPulseEvent(value: unknown): value is PulseEvent {
+  if (!value || typeof value !== "object") return false;
+  const event = value as Partial<PulseEvent>;
+  return (
+    typeof event.id === "string" &&
+    typeof event.service === "string" &&
+    typeof event.latencyMs === "number" &&
+    Number.isFinite(event.latencyMs) &&
+    typeof event.severity === "string" &&
+    validSeverities.has(event.severity as EventSeverity) &&
+    typeof event.ts === "string"
+  );
+}
+
+export function parseImportedEventsJson(input: string): PulseEvent[] {
+  const parsed = JSON.parse(input) as unknown;
+  if (!Array.isArray(parsed)) {
+    throw new Error("Imported JSON must be an array.");
+  }
+
+  const events = parsed.filter(isPulseEvent);
+  if (events.length === 0 && parsed.length > 0) {
+    throw new Error("No valid events found in JSON file.");
+  }
+
+  return events.slice(0, 200);
 }

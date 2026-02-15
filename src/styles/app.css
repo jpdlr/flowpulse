@@ -12,6 +12,9 @@ button,select{font:inherit;border-radius:999px;padding:10px 14px}
 button{border:none;background:#355f50;color:#fff;font-weight:600;cursor:pointer}
 button.ghost{background:transparent;color:var(--ink);border:1px solid var(--border)}
 select{border:1px solid var(--border);background:#f8f5ef;color:var(--ink)}
+.hidden-input{display:none}
+.hint{margin:0;color:var(--muted);font-size:13px}
+.status{margin:0;color:#2f644d;font-size:13px}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .stat span{font-size:13px;color:var(--muted)}
 .stat strong{display:block;margin-top:8px;font-size:26px;font-family:"Fraunces",serif}

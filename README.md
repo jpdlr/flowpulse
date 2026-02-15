@@ -7,7 +7,9 @@ FlowPulse is a local observability playground that simulates service latency eve
 - Synthetic event stream with pause/resume
 - Severity filtering (`info`, `warn`, `error`)
 - Latency summary cards and bar visualization
-- Clear/reset controls
+- Local event persistence (reload-safe)
+- JSON export/import for event snapshots
+- Keyboard shortcuts: `Space` (pause/resume), `Cmd/Ctrl+K` (clear), `Cmd/Ctrl+E` (export)
 - Tests + CI baseline
 
 ## Quick start
